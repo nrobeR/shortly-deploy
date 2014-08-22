@@ -3,6 +3,12 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
+      dist: {
+        files:{
+          'public/dist/built.js': ['public/client/*.js'],
+          'public/dist/lib.js': ['public/lib/*.js']
+        }
+      }
     },
 
     mochaTest: {
@@ -24,7 +30,7 @@ module.exports = function(grunt) {
     },
 
     jshint: {
-      files: [
+      files: [ 'test/**/*.js', 'app/**/*.js', 'public/**/*.js'
         // Add filespec list here
       ],
       options: {
@@ -89,12 +95,9 @@ module.exports = function(grunt) {
   // Main grunt tasks
   ////////////////////////////////////////////////////
 
-  grunt.registerTask('test', [
-    'mochaTest'
-  ]);
+  grunt.registerTask('test', ['jshint','mochaTest']);
 
-  grunt.registerTask('build', [
-  ]);
+  grunt.registerTask('build', ['jshint','mochaTest','concat','uglify']);
 
   grunt.registerTask('upload', function(n) {
     if(grunt.option('prod')) {
@@ -104,9 +107,7 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('deploy', [
-    // add your deploy tasks here
-  ]);
+  grunt.registerTask('deploy', ['jshint','mochaTest','concat','uglify']);
 
 
 };
