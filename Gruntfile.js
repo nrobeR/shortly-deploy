@@ -107,7 +107,7 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('deploy', ['jshint','mochaTest','concat','uglify']);
+  grunt.registerTask('deploy', ['jshint','concat','uglify']);
 
 
 };
