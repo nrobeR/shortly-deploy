@@ -2,11 +2,23 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+
+    // usemin: {
+    //   useminPrepare: {
+    //     html: 'views/layout.ejs',
+    //     options: {
+    //       dest: 'dist'
+    //     }
+    //   }
+    // },
+
     concat: {
-      dist: {
-        files:{
-          'public/dist/built.js': ['public/client/*.js'],
-          'public/dist/lib.js': ['public/lib/*.js']
+      generated: {
+        dist: {
+          files:{
+            'public/dist/built.js': ['public/client/*.js'],
+            'public/dist/lib.js': ['public/lib/*.js']
+          }
         }
       }
     },
@@ -27,7 +39,7 @@ module.exports = function(grunt) {
     },
 
     uglify: {
-      my_target: {
+      generated: {
         files: {
           'public/dist/built.min.js': ['public/dist/built.js'],
           'public/dist/lib.min.js': ['public/dist/lib.js']
@@ -50,13 +62,15 @@ module.exports = function(grunt) {
     },
 
     cssmin: {
-      minify: {
+      generated: {
+        minify: {
           expand: true,
           cwd: 'public/',
           src: ['*.css', '!*.min.css'],
           dest: 'public/',
           ext: '.min.css'
         }
+      }
     },
 
     watch: {
@@ -90,6 +104,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-nodemon');
+  grunt.loadNpmTasks('grunt-usemin');
 
   grunt.registerTask('server-dev', function (target) {
     // Running nodejs in a different process and displaying output on the main console
@@ -110,7 +125,13 @@ module.exports = function(grunt) {
 
   grunt.registerTask('test', ['jshint','mochaTest']);
 
-  grunt.registerTask('build', ['jshint','concat','uglify', 'cssmin']);
+  grunt.registerTask('build', ['jshint','concat','uglify', 'cssmin',
+    // 'useminPrepare',
+    // 'concat:generated',
+    // 'cssmin:generated',
+    // 'uglify:generated',
+    // 'usemin'
+  ]);
 
   grunt.registerTask('upload', function(n) {
     if(grunt.option('prod')) {
